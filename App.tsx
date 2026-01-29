@@ -1,8 +1,8 @@
 import React from 'react';
-import ProductListScreen from './src/screens/ProductListScreen';
+import LoginScreen from './src/screens/LoginScreen';
 
-function App(): JSX.Element {
-  return <ProductListScreen />;
+function App() {
+  return <LoginScreen />;
 }
 
 export default App;

@@ -17,3 +17,10 @@ React Native learning project.
 - Pushed changes to GitHub (daily contribution)
 
 More updates coming daily.
+
+## ✅ Day 3
+- Built Login Screen UI
+- Used `TextInput` with controlled state
+- Implemented `useState`
+- Handled keyboard using `KeyboardAvoidingView`
+- Added basic form interaction
