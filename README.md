@@ -37,6 +37,8 @@ This project is developed incrementally with a strong emphasis on clean code, sc
   - iOS: custom bottom toast
 - iOS Safe Area handling (notch & Dynamic Island support)
 - Native splash screen implementation (no JS-based splash screens)
+- Custom native app icon for Android and iOS
+
 
 ---
 
