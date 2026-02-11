@@ -55,7 +55,8 @@ const LoginScreen = () => {
   const handleLogin = async () => {
   if (authLoading) return;
 
-  await login();
+  await login(email, password);
+
 
   if (Platform.OS === 'android') {
     ToastAndroid.show('Login successful', ToastAndroid.SHORT);

@@ -27,10 +27,11 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isBootstrapping, setIsBootstrapping] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
+
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     bootstrap();
@@ -42,7 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userData = await AsyncStorage.getItem('user');
 
       if (token && userData) {
-        setIsLoggedIn(true);
         setUser(JSON.parse(userData));
       }
     } finally {
@@ -62,13 +62,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
       setUser(response.user);
-      setIsLoggedIn(true);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
-        'Login failed. Please try again.';
-
-      
     } finally {
       setAuthLoading(false);
     }
@@ -76,7 +69,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     await AsyncStorage.multiRemove(['accessToken', 'user']);
-    setIsLoggedIn(false);
     setUser(null);
   };
 
