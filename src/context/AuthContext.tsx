@@ -1,7 +1,9 @@
 import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginApi } from '../api/auth.api';
 
 type User = {
+  id?: string;
   name: string;
   email: string;
 };
@@ -9,7 +11,7 @@ type User = {
 type AuthContextType = {
   isLoggedIn: boolean;
   user: User | null;
-  login: () => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   isBootstrapping: boolean;
   authLoading: boolean;
@@ -36,10 +38,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const bootstrap = async () => {
     try {
-      const value = await AsyncStorage.getItem('isLoggedIn');
+      const token = await AsyncStorage.getItem('accessToken');
       const userData = await AsyncStorage.getItem('user');
 
-      if (value === 'true' && userData) {
+      if (token && userData) {
         setIsLoggedIn(true);
         setUser(JSON.parse(userData));
       }
@@ -48,32 +50,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async () => {
+  const login = async (email: string, password: string) => {
     if (authLoading) return;
 
-    setAuthLoading(true);
+    try {
+      setAuthLoading(true);
 
-    await new Promise<void>(resolve => {
-      setTimeout(() => resolve(), 1000);
-    });
+      const response = await loginApi(email, password);
 
-    const fakeUser: User = {
-      name: 'Divyanshu Tandon',
-      email: 'divyanshu@email.com',
-    };
+      await AsyncStorage.setItem('accessToken', response.accessToken);
+      await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
-    await AsyncStorage.multiSet([
-      ['isLoggedIn', 'true'],
-      ['user', JSON.stringify(fakeUser)],
-    ]);
+      setUser(response.user);
+      setIsLoggedIn(true);
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ||
+        'Login failed. Please try again.';
 
-    setUser(fakeUser);
-    setIsLoggedIn(true);
-    setAuthLoading(false);
+      
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
   const logout = async () => {
-    await AsyncStorage.multiRemove(['isLoggedIn', 'user']);
+    await AsyncStorage.multiRemove(['accessToken', 'user']);
     setIsLoggedIn(false);
     setUser(null);
   };
