@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:4000',
+  baseURL: 'https://firstrn-backend.onrender.com',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
