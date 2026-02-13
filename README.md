@@ -1,4 +1,4 @@
-# 📱 MyFirstRNApp
+# 📱 NexAuthMobile
 
 A **React Native learning project** focused on building **real-world, production-grade mobile app architecture** using modern best practices.
 
